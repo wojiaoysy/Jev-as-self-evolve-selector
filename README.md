@@ -6,7 +6,6 @@ This repository explores two approaches: learning a router that selects low-rank
 
 The long-term motivation is agent self-evolution. The current implementation is a **supervised parameter-adaptation research prototype** using Qwen2.5-1.5B-Instruct on GSM8K and BoolQ. It performs single-response task rollouts; it does not implement a tool-using agent environment. Router interventions and offline factor training use reference answers. Fixed-factor PDQ accumulation uses Jev features without online gradient training, but its factors were learned with supervision.
 
-[Chinese background](README_zh.md) · [Experiment protocol](docs/EXPERIMENT_zh.md) · [Implementation review](docs/REVIEW_zh.md) · [SSH upload guide (中文)](docs/GITHUB_SSH_zh.md)
 
 ## Motivation
 
