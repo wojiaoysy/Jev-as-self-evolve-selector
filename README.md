@@ -42,7 +42,6 @@ Let $e\in\mathbb{R}^m$ be the serialized Jev feature vector. The residual is
 
 $$
 \Delta W=P\mathrm{diag}(e_1,\cdots, e_m)Q
-           =\sum_{j=1}^{m}e_jp_jq_j^\top,
 $$
 
 where $P\in\mathbb{R}^{d_{out}\times m}$ and $Q\in\mathbb{R}^{m\times d_{in}}$. The diagonal matrix is represented as a vector in code.
