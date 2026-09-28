@@ -1,17 +1,17 @@
 # Jev-Guided Subspace Adaptation
 
-An experimental study of whether structured judgments from **Jev** can guide useful parameter updates in a language-model agent.
+An experimental study of whether Jev can guide useful parameter updates in a llm agent.
 
-This repository explores two approaches: learning a router that selects low-rank update subspaces, and learning a factorization that maps Jev features directly to a weight residual. **The saved experiments do not establish a consistent capability improvement from either approach.** In particular, repeatedly accumulating the learned residual causes substantial degradation under the tested configuration.
+This repository explores two approaches: learning a router that selects low-rank subspaces, and learning a factorization that maps Jev features to a weight residual. The saved experiments do not establish a consistent capability improvement from either approach. In particular, repeatedly accumulating the learned residual causes substantial degradation under the tested configuration.
 
-The long-term motivation is agent self-evolution. The current implementation is a **supervised parameter-adaptation research prototype** using Qwen2.5-1.5B-Instruct on GSM8K and BoolQ. It performs single-response task rollouts; it does not implement a tool-using agent environment. Router interventions and offline factor training use reference answers. Fixed-factor PDQ accumulation uses Jev features without online gradient training, but its factors were learned with supervision.
+The long-term motivation is agent self-evolution. The current implementation is a supervised parameter-adaptation research prototype using Qwen2.5-1.5B-Instruct on GSM8K and BoolQ. It performs single-response task rollouts; it does not implement a tool-using agent environment. Router interventions and offline factor training use reference answers. Fixed-factor PDQ accumulation uses Jev features without online gradient training, but its factors were learned with supervision.
 
 
 ## Motivation
 
 [Jev](https://docs.typesafe.ai/introduction) is TypeSafe's model for fast, structured judgments. It evaluates a state against typed questions and returns values or distributions. This motivates using it as a diagnostic component with relatively little evaluation overhead. This repository does not independently establish Jev's speed advantage or broad generalization, and those properties would not by themselves guarantee useful parameter updates.
 
-The research question is: **Can a diagnosis of a model's output identify how its parameters should change?** Recognizing an error and selecting a beneficial weight update require different information. The experiments test a bridge between them.
+The research question is: Can a diagnosis of a model's output identify how its parameters should change? Recognizing an error and selecting a beneficial weight update require different information. The experiments test a bridge between them.
 
 ## Methods
 
@@ -32,7 +32,7 @@ The fixed bases $U_i,V_i$ are grouped singular vectors of the original weight; e
 
 The default reward is negative completion NLL, a proxy for final task accuracy. Jev's HTTP response is a feature source; it does not supply a differentiable gradient through the API.
 
-**Router scores only control selection. They do not multiply the adapter's forward contribution or the learning rate.** All previously learned subspace contributions remain in the forward pass. Consequently, scores below 1 cannot explain small weight updates through coefficient attenuation in this implementation.
+Router scores only control selection. All previously learned subspace contributions remain in the forward pass. Consequently, scores below 1 cannot explain small weight updates through coefficient attenuation in this implementation.
 
 With $K=8,r=8$, the adapter contains 512 trainable scalars; Top-2 trains 128 per intervention. Only matching blocks $U_iR_iV_i^\top$ are available, not arbitrary cross-block updates. Orthogonality in weight space does not imply independent effects on model behavior.
 
@@ -47,7 +47,7 @@ $$
 
 where $P\in\mathbb{R}^{d_{out}\times m}$ and $Q\in\mathbb{R}^{m\times d_{in}}$. The diagonal matrix is represented as a vector in code.
 
-Here $m=270$ for the configured feature schema, **not the router's block rank $r=8$**. The features include probabilities, presence masks, confidence values, and aggregate statistics. The residual has rank at most $\min(m,d_{out},d_{in})$; it need not have rank exactly $m$. For the selected 1536-by-1536 projection, P/Q contain 829,440 trainable parameters.
+Here $m=270$ for the configured feature schema, not the router's block rank $r=8$. The features include probabilities, presence masks, confidence values, and aggregate statistics. The residual has rank at most $\min(m,d_{out},d_{in})$; it need not have rank exactly $m$. For the selected 1536-by-1536 projection, P/Q contain 829,440 trainable parameters.
 
 P/Q are trained offline on the router's training episode IDs and selected by loss on its validation IDs. Once fixed, they define a dictionary of at most $m$ rank-one matrices: varying Jev features changes coefficients within that dictionary. It cannot introduce a new direction outside its span, and the actual feature range can constrain the attainable updates further.
 
@@ -63,7 +63,7 @@ The CLI currently defaults to `accumulate`; pass the mode explicitly. Accumulati
 
 ## Saved experimental results
 
-These are existing local results, copied into [docs/results](docs/results) for publication; they were not rerun while preparing this README. Values are **mean ± sample standard deviation across seeds 42, 43, and 44**, expressed in percent. They are not confidence intervals.
+These are existing local results, copied into [docs/results](docs/results) for publication; they were not rerun while preparing this README. Values are mean ± sample standard deviation across seeds 42, 43, and 44, expressed in percent. They are not confidence intervals.
 
 The BoolQ development set and GSM8K retention set each contain 128 examples held out from adaptation splits. These are development/retention results, not full official test scores. One changed answer corresponds to 0.78125 percentage points within one seed.
 
@@ -102,7 +102,7 @@ For dynamic PDQ, the episode count is a monitoring index, not a count of permane
 
 The [80-episode dynamic ablations](docs/results/boolq_ablations80/final_dev_summary.json) additionally contain forced Top-2 routing, shuffled features, and an identity diagonal. Identity PDQ reaches 79.43% BoolQ accuracy versus 78.13% for the frozen base, while GSM8K retention is 42.45% versus 50.78%. That tradeoff does not establish a benefit from Jev conditioning. PDQ controls reuse the same factors trained with real features; they are substitution ablations, not independently trained, matched baselines.
 
-Across these tables, the router has no consistent target-task advantage. It also does **not** always underperform `all`: on the 200-episode BoolQ evaluation, the router is 77.60% and `all` is 74.22%. Here **`all` means all eight adapter subspaces, not full-model fine-tuning**.
+Across these tables, the router has no consistent target-task advantage.
 
 ### Evaluation limitations
 
