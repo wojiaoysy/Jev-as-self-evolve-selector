@@ -41,7 +41,7 @@ With $K=8,r=8$, the adapter contains 512 trainable scalars; Top-2 trains 128 per
 Let $e\in\mathbb{R}^m$ be the serialized Jev feature vector. The residual is
 
 $$
-\Delta W(e)=P\,\mathrm{diag}(e)\,Q
+\Delta W=P\mathrm{diag}\{e_1,\cdots, e_m\}Q
            =\sum_{j=1}^{m}e_jp_jq_j^\top,
 $$
 
