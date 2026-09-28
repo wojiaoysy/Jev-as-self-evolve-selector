@@ -1,0 +1,129 @@
+{
+  "format": 1,
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "interval": 20,
+  "episodes": 80,
+  "policies": [
+    "base",
+    "router",
+    "random",
+    "all",
+    "pdq",
+    "router_top2",
+    "pdq_shuffle",
+    "pdq_identity"
+  ],
+  "update_mode": "direct",
+  "pdq_mode": "accumulate",
+  "mode": "full",
+  "config": {
+    "seed": 42,
+    "model": {
+      "name": "/root/autodl-tmp/self-evolve/models/qwen2.5-1.5b-instruct",
+      "revision": "main",
+      "device": "cuda",
+      "dtype": "bfloat16",
+      "attention": "sdpa",
+      "gradient_checkpointing": true,
+      "max_length": 2048,
+      "max_new_tokens": 384,
+      "target_module": "model.layers.14.self_attn.q_proj",
+      "task": "boolq"
+    },
+    "adapter": {
+      "K": 8,
+      "rank": 8
+    },
+    "judge": {
+      "provider": "typesafe",
+      "model": "jev-1.13.0",
+      "endpoint": "https://api.typesafe.ai/v1/systemone",
+      "max_steps": 12,
+      "token_slots": 8,
+      "timeout": 60,
+      "retries": 3,
+      "cache_dir": "runs/jev_cache",
+      "task": "boolq"
+    },
+    "intervention": {
+      "optimizer": "adamw",
+      "lr": 0.01,
+      "steps": 2,
+      "grad_clip": 1.0,
+      "max_update_norm": 1.0,
+      "reward": "neg_nll",
+      "probe_size": 8
+    },
+    "router": {
+      "hidden": 128,
+      "epochs": 100,
+      "batch_size": 32,
+      "lr": 0.001,
+      "weight_decay": 0.01,
+      "rank_weight": 0.2,
+      "sparsity_weight": 0.001,
+      "gain_floor": 1e-05,
+      "top_k": 2,
+      "threshold": 0.5
+    },
+    "online": {
+      "min_gain": 1e-05,
+      "guard_tolerance": 0.0
+    }
+  },
+  "data_id": "b3dd1a56b368a7bf86a0a6fec0e59cc4af461a7e2f84fc697dc28d3014374cf8",
+  "dev_id": "33bcaa07eb268f1a28c9f6b836155ca343a1dfa7944aa2b08605cd24fab03b21",
+  "evaluation_protocol": {
+    "system": "Read the passage and answer the question using the passage. Output only '#### yes' or '#### no'.",
+    "max_length": 2048,
+    "max_new_tokens": 384,
+    "do_sample": false,
+    "dtype": "bfloat16",
+    "attention": "sdpa",
+    "parser_id": "40bf2d87bfeb409d6492549e99e1a84fef4952073451d7491a3018350b5852bf"
+  },
+  "initial_identity": {
+    "base_hash": "4f9680b061b7d71f6841425ee15ffbf6f38b4e2eb5e7e43896ef71719a34903e",
+    "target_module": "model.layers.14.self_attn.q_proj",
+    "K": 8,
+    "rank": 8,
+    "basis_id": "1467a4b6a4b9b77b70eb39caa2773615232aa3522b27e693650faad64994e72b",
+    "id": "9ef6e333f80ca9849c1d154d95517e4dd384492d035c4f09554debebb2834021"
+  },
+  "initial_R": "eed0a7842c46c6136f3f1d8735f635f3cc1f5cd3223c22bb72db7493af167529",
+  "shared_router_hash": null,
+  "pdq_accumulation_scale": 1.0,
+  "reused_offline": {
+    "path": "/root/autodl-tmp/self-evolve/runs/boolq_five_dynamic",
+    "hashes": {
+      "42": {
+        "router": "f2bd559c37b312955d534d5d4719552ae79c1c16e82458ff2d3611e0eac7a1f7",
+        "pdq": "43300a13f706880afda60a8eae58cb3988845479d8816c06324e99a41d80344f"
+      },
+      "43": {
+        "router": "570f6662dbcb04dfb772d765066bdb182c4784dfb59a048ea2b81233820f06cd",
+        "pdq": "342125d3c39f0a3499418882627008e3607de23afb09bbe4680103d8bdaaa15b"
+      },
+      "44": {
+        "router": "ae5e6eb4888b94aab621269520c3add7e37b45bdcc4b32b8c1cb4c20c40419a3",
+        "pdq": "03d221344b6d59a4fc6ad5370d3c101d4e83b9c36e584eb3c0c8de62b951c389"
+      }
+    }
+  },
+  "retention": {
+    "id": "1152aaac1fa5cfac8bb616f408776a4c86808d9b82fb3ab803b3e481b9617911",
+    "protocol": {
+      "system": "Solve the math problem. Show concise, justified steps. End with '#### ' followed by the final numeric answer.",
+      "max_length": 2048,
+      "max_new_tokens": 384,
+      "do_sample": false,
+      "dtype": "bfloat16",
+      "attention": "sdpa",
+      "parser_id": "4a5f5fc42c79a35d6dd242ee4bcd18e09e5146ef33c1660591e3733bd4a7df1c"
+    }
+  }
+}

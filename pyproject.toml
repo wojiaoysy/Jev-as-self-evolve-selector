@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jev-subspace-evolve"
+version = "0.1.0"
+description = "Reproducible single-layer Jev-guided parameter-subspace adaptation"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+jev-evolve = "jev_evolve.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

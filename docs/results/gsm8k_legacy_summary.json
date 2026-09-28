@@ -1,0 +1,105 @@
+{
+  "comparison": {
+    "baseline": "base",
+    "results": [
+      {
+        "label": "base",
+        "n": 1319,
+        "full_test": true,
+        "accuracy": 0.01592115238817286,
+        "delta_vs_first": 0.0,
+        "paired_bootstrap_ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "label": "router",
+        "n": 1319,
+        "full_test": true,
+        "accuracy": 0.013646702047005308,
+        "delta_vs_first": -0.0022744503803551197,
+        "paired_bootstrap_ci95": [
+          -0.008339650928974152,
+          0.0030326005071401596
+        ]
+      },
+      {
+        "label": "random",
+        "n": 1319,
+        "full_test": true,
+        "accuracy": 0.01592115238817286,
+        "delta_vs_first": 0.0,
+        "paired_bootstrap_ci95": [
+          -0.004548900760710239,
+          0.004548900760710239
+        ]
+      },
+      {
+        "label": "all",
+        "n": 1319,
+        "full_test": true,
+        "accuracy": 0.015163002274450341,
+        "delta_vs_first": -0.0007581501267850399,
+        "paired_bootstrap_ci95": [
+          -0.005307050887495279,
+          0.0037907506339251995
+        ]
+      }
+    ]
+  },
+  "reports": {
+    "base": {
+      "n": 1319,
+      "accuracy": 0.01592115238817286,
+      "parse_failures": 1285,
+      "protocol": {
+        "system": "Solve the math problem. Show concise, justified steps. End with '#### ' followed by the final numeric answer.",
+        "max_length": 1024,
+        "max_new_tokens": 384,
+        "do_sample": false,
+        "dtype": "bfloat16",
+        "attention": "sdpa"
+      }
+    },
+    "router": {
+      "n": 1319,
+      "accuracy": 0.013646702047005308,
+      "parse_failures": 1286,
+      "protocol": {
+        "system": "Solve the math problem. Show concise, justified steps. End with '#### ' followed by the final numeric answer.",
+        "max_length": 1024,
+        "max_new_tokens": 384,
+        "do_sample": false,
+        "dtype": "bfloat16",
+        "attention": "sdpa"
+      }
+    },
+    "random": {
+      "n": 1319,
+      "accuracy": 0.01592115238817286,
+      "parse_failures": 1288,
+      "protocol": {
+        "system": "Solve the math problem. Show concise, justified steps. End with '#### ' followed by the final numeric answer.",
+        "max_length": 1024,
+        "max_new_tokens": 384,
+        "do_sample": false,
+        "dtype": "bfloat16",
+        "attention": "sdpa"
+      }
+    },
+    "all": {
+      "n": 1319,
+      "accuracy": 0.015163002274450341,
+      "parse_failures": 1281,
+      "protocol": {
+        "system": "Solve the math problem. Show concise, justified steps. End with '#### ' followed by the final numeric answer.",
+        "max_length": 1024,
+        "max_new_tokens": 384,
+        "do_sample": false,
+        "dtype": "bfloat16",
+        "attention": "sdpa"
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+# Preserve the AutoDL image's torch==2.1.2+cu118. Do not install latest torch.
+numpy==1.26.4
+transformers==4.44.2
+tokenizers==0.19.1
+huggingface-hub==0.25.2
+safetensors==0.4.5
+requests==2.32.3

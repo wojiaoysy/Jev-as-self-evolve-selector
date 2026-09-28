@@ -1,0 +1,53 @@
+{
+  "seed": 42,
+  "model": {
+    "name": "/root/autodl-tmp/self-evolve/models/qwen2.5-1.5b-instruct",
+    "revision": "main",
+    "device": "cuda",
+    "dtype": "bfloat16",
+    "attention": "sdpa",
+    "gradient_checkpointing": true,
+    "max_length": 1024,
+    "max_new_tokens": 384,
+    "target_module": "model.layers.14.self_attn.q_proj"
+  },
+  "adapter": {
+    "K": 8,
+    "rank": 8
+  },
+  "judge": {
+    "provider": "typesafe",
+    "model": "jev-1.13.0",
+    "endpoint": "https://api.typesafe.ai/v1/systemone",
+    "max_steps": 12,
+    "token_slots": 8,
+    "timeout": 60,
+    "retries": 3,
+    "cache_dir": "runs/jev_cache"
+  },
+  "intervention": {
+    "optimizer": "adamw",
+    "lr": 0.01,
+    "steps": 2,
+    "grad_clip": 1.0,
+    "max_update_norm": 1.0,
+    "reward": "neg_nll",
+    "probe_size": 8
+  },
+  "router": {
+    "hidden": 128,
+    "epochs": 100,
+    "batch_size": 32,
+    "lr": 0.001,
+    "weight_decay": 0.01,
+    "rank_weight": 0.2,
+    "sparsity_weight": 0.001,
+    "gain_floor": 1e-05,
+    "top_k": 2,
+    "threshold": 0.5
+  },
+  "online": {
+    "min_gain": 1e-05,
+    "guard_tolerance": 0.0
+  }
+}
